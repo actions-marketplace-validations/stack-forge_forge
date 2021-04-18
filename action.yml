@@ -1,5 +1,5 @@
-name: "Stackforge Init"
-description: "Initialize your stackforge environment"
+name: "Stackforge Forge"
+description: "Forge your infrastructure"
 branding:
   icon: 'cloud'
   color: 'blue'
