@@ -1,0 +1,12 @@
+service:
+  project: stackforge-core
+  provider: aws
+  region: us-east-1
+  dns_provider: aws
+  hosted_zone: stackforge.tech
+
+hosts:
+  website:
+    type: bucket_cdn
+    name: website-host
+    url: ci-forge-test.stackforge.tech

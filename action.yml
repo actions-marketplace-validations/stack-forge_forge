@@ -1,0 +1,18 @@
+name: "Stackforge Init"
+description: "Initialize your stackforge environment"
+branding:
+  icon: 'cloud'
+  color: 'blue'
+inputs:
+  config_file:
+    description: "Stackforge's config file"
+    required: true
+  api_key: 
+    description: "Stackforge's API key"
+    required: true
+  stage:
+    description: "The stage you're deploying to"
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
