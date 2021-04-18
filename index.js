@@ -69,21 +69,25 @@ async function run () {
         cb()
       }
 
-      exec(
-        'terraform init',
-        { cwd },
-        defaultCb(() =>
+      exec(`terraform workspace new ${stage}`, { cwd }, () =>
+        exec(`terraform workspace select ${stage}`, { cwd }, () =>
           exec(
-            'terraform plan -out tf-plan',
+            'terraform init',
             { cwd },
             defaultCb(() =>
               exec(
-                'terraform apply -auto-approve tf-plan',
+                'terraform plan -out tf-plan',
                 { cwd },
-                defaultCb(async () => {
-                  await Promise.all([fs.remove(cwd), fs.remove(outFile)])
-                  resolve(true)
-                })
+                defaultCb(() =>
+                  exec(
+                    'terraform apply -auto-approve tf-plan',
+                    { cwd },
+                    defaultCb(async () => {
+                      await Promise.all([fs.remove(cwd), fs.remove(outFile)])
+                      resolve(true)
+                    })
+                  )
+                )
               )
             )
           )
