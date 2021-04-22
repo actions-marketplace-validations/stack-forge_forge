@@ -10,6 +10,8 @@ RUN apt install apt-transport-https -y -qq
 RUN apt update -qq
 RUN apt install terraform
 
+WORKDIR /github/workspace/
+
 COPY . .
 
 ENTRYPOINT [ "node", "dist" ]
