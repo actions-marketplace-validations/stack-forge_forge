@@ -2285,7 +2285,7 @@ async function run () {
     const outFile = 'output.tgz'
     const writer = fs.createWriteStream(outFile)
     await axios
-      .post('http://localhost:3050/v1/transform', form, {
+      .post('https://api.stackforge.tech/v1/transform', form, {
         responseType: 'stream',
         headers: {
           Authorization: `Bearer ${apiKey}`,
@@ -2327,33 +2327,35 @@ async function run () {
         cb()
       }
 
-      exec(
-        'terraform init',
-        { cwd },
-        defaultCb(() =>
+      exec(`terraform workspace new ${stage}`, { cwd }, () =>
+        exec(`terraform workspace select ${stage}`, { cwd }, () =>
           exec(
-            'terraform plan -out tf-plan',
+            'terraform init',
             { cwd },
             defaultCb(() =>
               exec(
-                'terraform apply -auto-approve tf-plan',
+                'terraform plan -out tf-plan',
                 { cwd },
-                defaultCb(async () => {
-                  await Promise.all([fs.remove(cwd), fs.remove(outFile)])
-                  resolve(true)
-                })
+                defaultCb(() =>
+                  exec(
+                    'terraform apply -auto-approve tf-plan',
+                    { cwd },
+                    defaultCb(async () => {
+                      await Promise.all([fs.remove(cwd), fs.remove(outFile)])
+                      resolve(true)
+                    })
+                  )
+                )
               )
             )
           )
         )
       )
     })
+    console.log('Finished forging!')
   } catch (error) {
-    const showStackTrace = process.env.SHOW_STACK_TRACE
-
-    if (showStackTrace === 'true') {
-      throw error
-    }
+    console.error(error)
+    throw error
   }
 }
 
