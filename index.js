@@ -50,7 +50,6 @@ async function run () {
           })
         })
       })
-      .catch(({ response }) => Promise.reject(response.data))
 
     const cwd = './out'
     await decompress({
@@ -96,9 +95,15 @@ async function run () {
     })
     console.log('Finished forging!')
   } catch (error) {
-    console.error(error)
+    console.error(await parseReadableStreamToJson(error))
     core.setFailed(error.message)
   }
+}
+
+const parseReadableStreamToJson = async (error) => {
+  const data = (await error.getReader().read()).value
+  const str = String.fromCharCode.apply(String, data);
+  return JSON.parse(str);
 }
 
 module.exports = run
