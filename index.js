@@ -97,7 +97,7 @@ async function run () {
     console.log('Finished forging!')
   } catch (error) {
     console.error(error)
-    throw error
+    core.setFailed(error.message)
   }
 }
 
