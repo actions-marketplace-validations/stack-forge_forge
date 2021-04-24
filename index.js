@@ -96,11 +96,8 @@ async function run () {
     })
     console.log('Finished forging!')
   } catch (error) {
-    const showStackTrace = process.env.SHOW_STACK_TRACE
-
-    if (showStackTrace === 'true') {
-      throw error
-    }
+    console.error(error)
+    throw error
   }
 }
 
