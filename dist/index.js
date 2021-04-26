@@ -2340,8 +2340,18 @@ async function run () {
                     'terraform apply -auto-approve tf-plan',
                     { cwd },
                     defaultCb(async () => {
-                      await Promise.all([fs.remove(cwd), fs.remove(outFile)])
-                      resolve(true)
+                      exec(
+                        'terraform output -json',
+                        { cwd },
+                        async (err, stdout, stderr) => {
+                          if (err || stderr) {
+                            console.error(stderr)
+                            await Promise.all([fs.remove(cwd), fs.remove(outFile)])
+                            return reject(err || Error(stderr))
+                          }
+                          core.setCommandEcho(`::set-env name=STACKFORGE_OUTPUTS::{${JSON.stringify(stdout)}}`)
+                        }
+                      )
                     })
                   )
                 )
