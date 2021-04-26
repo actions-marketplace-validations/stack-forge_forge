@@ -13,6 +13,9 @@ inputs:
   stage:
     description: "The stage you're deploying to"
     required: true
+outputs:
+  infra_outputs:
+    description: "The infra step outputs"
 runs:
   using: 'docker'
   image: 'Dockerfile'
