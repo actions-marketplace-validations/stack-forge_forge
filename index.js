@@ -91,7 +91,7 @@ async function run () {
                             await Promise.all([fs.remove(cwd), fs.remove(outFile)])
                             return reject(err || Error(stderr))
                           }
-                          core.setCommandEcho(`::set-env name=STACKFORGE_OUTPUTS::{${JSON.stringify(stdout)}}`)
+                          core.setCommandEcho(`::set-env name=STACKFORGE_OUTPUTS::${stdout}`)
                         }
                       )
                     })
