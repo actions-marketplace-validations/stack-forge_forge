@@ -2285,7 +2285,7 @@ async function run () {
     const outFile = 'output.tgz'
     const writer = fs.createWriteStream(outFile)
     await axios
-      .post('https://api.stackforge.tech/v1/transform', form, {
+      .post('https://apiv1.stackforge.tech/v1/transform', form, {
         responseType: 'stream',
         headers: {
           Authorization: `Bearer ${apiKey}`,
